@@ -1,1 +1,0 @@
-{"rajnath":{"firstName":"Rajnath","lastName":"Prasad","email":"rajnathprasad.cs@gmail.com","dob":"2003-10-09","pswd":"$2b$10$9XX81sN06Axk4gABayqEh.EFCfOsfptekZi3ZlcDadq2uXFK0q9rS"},"rishabh":{"firstName":"Rishabh","lastName":"Vishwakarma","email":"rishabh@gmail.com","dob":"2026-03-10","pswd":"$2b$10$FBt1LmRZTrhKNpfOsO8U8.ozh63UVTRKHwFRnjkKIfMJAnJoRQwD."}}
