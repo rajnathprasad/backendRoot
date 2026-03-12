@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1 id="heading">Hopempage</h1>
+    <div class="container">
+      <div class="loginForm form">
+        <!-- login -->
+        <form method="POST" action="/login">
+          <input type="text" name="uname" placeholder="Username" />
+          <br />
+          <input type="password" name="pswd" placeholder="Password" />
+          <br />
+          <input type="submit" value="Log In" />
+        </form>
+      </div>
+
+      <!-- signup -->
+      <div class="signUpFrom form">
+        <form method="POST" action="/signUp">
+          <input type="text" name="firstName" placeholder="firstName" />
+          <br />
+          <input type="text" name="lastName" placeholder="lastName" />
+          <br />
+          <input type="email" name="email" placeholder="email" />
+          <br />
+          <input type="text" name="uname" placeholder="uname" />
+          <br />
+          <input type="date" name="dob" />
+          <br />
+          <input type="password" name="pswd" placeholder="Create Password" />
+          <br />
+          <input
+            type="password"
+            name="cnfPswd"
+            placeholder="Confirm Password"
+          />
+          <br />
+          <input type="submit" value="Sign Up" />
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

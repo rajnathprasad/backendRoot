@@ -1,0 +1,14 @@
+#heading{
+    text-align: center;
+}
+
+.container{
+    display : flex;
+    justify-content: center;
+    flex-direction: row;
+    gap : 20px
+}
+
+.form{
+     margin:10px;
+}
