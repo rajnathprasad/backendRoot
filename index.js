@@ -54,7 +54,7 @@ app.post("/login", async function (req, res) {
   const password = req.body.pswd;
   if(username=="" || password==""){
     res.json({
-      message : "Fill all the details"
+      message : "Fill both fields"
     })
   }
   const userRecord = await userModel.findOne({
