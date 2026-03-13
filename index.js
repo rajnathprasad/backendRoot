@@ -25,19 +25,11 @@ function auth(req, res, next) {
   }
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-
-    const data = fs.readFileSync("cred.txt", "utf-8");
-    const dataJson = JSON.parse(data);
-    console.log(dataJson);
-    if (dataJson[decoded.username]) {
-      console.log("Hello", decoded.username);
-      req.username=decoded.username
-      next();
-    } else {
-      return res.status(403).json({
-          message: "User not found",
-        }
-      );
+    const userFound = userModel.find({
+      username : decoded.username
+    })
+    if(userFound){
+      console.log("Hello User")
     }
   } catch (err) {
     return res.status(403).json({ msg: "Invalid token" });
