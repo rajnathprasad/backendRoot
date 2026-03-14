@@ -6,7 +6,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose")
 const {JWT_SECRET, MONGO_URI, PORT} = require("./config.js");
-const {userModel, adminModel} = require("./db.js")
+const {userModel, adminModel} = require("./db.js");
+const { decode } = require("punycode");
 
 //middlewares
 app.use(express.static("public"));
@@ -14,22 +15,23 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 //auth middleware
-function auth(req, res, next) {
+async function auth(req, res, next) {
   const authHeader = req.headers.authorization;
-  if (!authHeader) {
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res.status(403).json({ message: "Authorization header missing" });
   }
   const token = authHeader.split(" ")[1];
-  if (!token) {
-    return res.status(403).json({ message: "Token missing" });
-  }
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    const userFound = userModel.find({
-      username : decoded.username
-    })
-    if(userFound){
-      console.log("Hello User")
+    const userRecord = await userModel.findById(decoded.userId)
+    if(userRecord){
+      req.user = userRecord
+      return next()
+    }
+    else{
+      return res.send({
+        message : "User not found"
+      })
     }
   } catch (err) {
     return res.status(403).json({ msg: "Invalid token" });
@@ -41,11 +43,11 @@ app.get("/", function (req, res) {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-app.post("/login", async function (req, res) {
+app.post("/signIn", async function (req, res) {
   const username = req.body.uname;
   const password = req.body.pswd;
   if(username=="" || password==""){
-    res.json({
+    return res.json({
       message : "Fill both fields"
     })
   }
@@ -64,7 +66,7 @@ app.post("/login", async function (req, res) {
     })
   }
   else{
-    const token = `Bearer ${jwt.sign({username : userRecord.username},JWT_SECRET, {expiresIn : "1h"})}`
+    const token = jwt.sign({userId : userRecord._id},JWT_SECRET, {expiresIn : "1h"})
     return res.json({
       message : "Logged in",
       authentication : token
@@ -91,7 +93,14 @@ app.post("/signUp", async function (req, res) {
       message : "Create password and confirm password are not same"
     })
   }
-
+  const existingUser = await userModel.findOne({
+        username : username
+      })
+      if(existingUser){
+        return res.json({
+          message : "Username already taken"
+        })
+    }
   try{
     const hashedPassword = await bcrypt.hash(password,10);
     await userModel.create({
